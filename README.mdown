@@ -1,0 +1,26 @@
+About:
+======
+This is a app which helps you to merge your tags with typo or this sort of mistake.
+
+This project "needs" the coffescript compiler that you can find [here](http://coffeescript.org/)
+
+How to run?
+======
+
+You can run this project [here](http://delicious-tag-merger.appspot.com/) or run it in your own machine:
+
+1. clone this [project](https://github.com/hankpillow/delicious-tag-merger "Github").
+2. download [google app engine](http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Python "Google App Engine") for python.
+3. open the GAE app and map the cloned folder
+4. run your app!
+
+Disclaimer
+======
+
+First of all this is a **personal** project.
+
+Absolutely no personal information is kept, shared or so. The Delicious API seems to not be the most reliable thing at all, service timeout happens all the time. Be patient and use carefully!
+
+This is a private project for personal use only!
+
+License Released under the [MIT License](http://www.opensource.org/licenses/mit-license.php)

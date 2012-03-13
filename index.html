@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<meta charset="utf-8">
+
+		<title>Delicious Tag Merger</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="igor almeida">
+		<meta name="expires" content="Never expire">
+
+		<!-- facebook -->
+		<meta property="og:url" content="https://delicious-tag-merger.appspot.com" />
+		<meta property="og:site_name" content="Delicious Tag Merger" />
+		<meta property="og:type" content="utility" />
+		<meta property="og:image" content="https://delicious-tag-merger.appspot.com/img/Tag.png" />
+		<meta property="og:title" content="Delicious Tag Merger" />
+		<meta property="og:description" content="After years using Delicious your tags becomes a big mess, this app helps you to merge your tags with typo, plurals and so forth.">
+
+		<!--[if lt IE 9]>
+		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+		<link rel="shortcut icon" href="favicon.ico">
+		
+		<style type="text/css" media="screen">
+			.invisible{
+				display:none;
+			}
+		</style>
+
+		<script src="js/lib/yepnope.1.5.3-min.js"></script>
+		<script type="text/javascript">
+
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-29963149-1']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+
+		</script>
+	</head>
+
+	<body class="invisible">
+
+		<div id="fb-root"></div>
+		<script>
+		if (document.location.href=="http://delicious-tag-merger.appspot.com/"){
+			(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=322996604415802";
+			  fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+		}
+		</script>
+
+		<script type="text/javascript" charset="utf-8">
+			yepnope( {
+				  load : ["css/bootstrap.min.css","css/page.css","js/lib/jquery-1.7.1.min.js","js/lib/bootstrap.min.js","js/app.js"]
+				, complete:function( ) {
+						$("body").removeClass("invisible");
+						window.login.init();
+					}
+				}
+			);
+		</script>
+		<div class="navbar navbar-inner navbar-noborder">
+			<div class="container">
+				<div class="logo">
+					<img src="img/Tag.png" title="Delicious Tag Merger"></img>
+					<h3>Delicious Tag Merger</h3>
+				</div>
+				<div class="try">
+					<a href="http://delicious-sweeper.appspot.com/" target="_blank"><img src="http://delicious-sweeper.appspot.com/img/Broom.png" alt="Delicious Sweeper"></img>
+					<small>try delicious sweeper</small></a>
+				</div>
+				<div class="fb-like facebook"
+					data-href="http://delicious-tag-merger.appspot.com"
+					data-send="false"
+					data-layout="button_count"
+					data-width="90"
+					data-show-faces="false">
+				</div>
+			</div>
+	    </div>
+		<div class="container">
+			<div class="row">
+				<!-- 
+				//////////////////////////////////////////
+				STEP 1
+				-->
+				<div id="step1" class="span4">
+					<h2>Step 1.</h2>
+					<h3>Delicous login.</h3>
+					<p>The Delicious API was the only way I found to get all url you have bookmarked so far. Consuming the public feed isn't enough because it returns just the last 100 items added.</p>
+					<form class="well" id="frm_login" action="/login" method="post" accept-charset="utf-8">
+						<fieldset>
+							<div class="control-group" id="control-user">
+								<label class="control-label" for="delicious_user">Username</label>
+								<input class="span3" placeholder="delicious username" type="text" value="" id="delicious_user">	
+							</div>
+							<div class="control-group" id="control-pass">
+								<label class="control-label" for="delicious_pass">Password</label>
+								<input class="span3" type="password" value="" id="delicious_pass">
+							</div>
+						</fieldset>
+						<h3 id="delicious_name" class="fade out"></h3>
+						<input class="btn-large btn-primary" type="submit" id="btn_login" value="Login" />
+					</form>
+					<div id="login_status" class="alert hidden"></div>
+				</div>
+				<div class="span4">
+					<h2>Step 2.</h2>
+					<h3>Your tag list.</h3>
+					<div id="step2">
+						<p>The following the list is your tag list with only unique values. <strong>Click in the tags you want to merge</strong> and follow the step 3 instructions</p>
+						<div id="tag_list">
+						</div>
+					</div>
+				</div>
+				<div class="span4">
+					<h2>Step 3.</h2>
+					<h3>Go merge it!</h3>
+					<div id="step3">
+						<h3>1 - Choose a name</h3>
+						<div id="status_merge" class="alert"></div>
+						<form class="well well-compact form-inline" action="/merge" method="post" id="frm_merge" accept-charset="utf-8">
+							<div class="control-group compact" id="tag_control">
+								<input class="input input-large" placeholder="choose a tag name" type="text" value="" id="tag_name">
+							</div>
+							<div id="progress_container" class="progress progress-info progress-striped compact input-large">
+								<div class="bar" id="progress_bar" style="width: 0%;"></div>
+							</div>
+							<button class="btn btn-small btn-primary compact" type="submit" id="btn_merge">Merge</button>
+						</form>
+						<h3>2 - Tags to merge</h3>
+						<p><small>(these tags will be merged to the new value above. click to remove)</small></p>
+						<p class="fade out" id="tag_count"></p>
+						<div id="tags_to_merge"></div>
+					</div>
+				</div>
+			</div>
+			<!-- end rows -->
+			<hr>
+			<footer class="footer">
+				<div class="row">
+					<div class="span4">
+						<h4>About</h4>
+						<p>After years using Delicious you'll find out that your tag list is a big mess. Typo, plurals, uppercase, lowercase is the most familiar issues you'll got.
+						This app helps you to select and merge your tags, keeping it tidy and ease to remember.</p>
+						<p>The software is provided ‘as is’ without any warranties. Use at your own risk.</p>
+						<p>Your use of this app expressly indemnifies the creators from any direct or indirect damages resulting from the use or misuse of this software.</p>
+					</div>
+					<div class="span4">
+						<h4>Privacy</h4>
+						<p>This is a private project for personal use only!</p>
+						<p>First of all this is a <strong>personal</strong> project and absolutely no personal information is kept, shared or so.</p>
+						<p>All the code is hosted on <a href="http://github.com">github</a> and you can see there that I'm not saving your personal data, but if you still not feeling good you can run this project locally in your computer.</p>
+						<p>Instructions <a href="https://github.com/hankpillow/delicious-tag-merger">here</a></p>
+					</div>
+					<div class="span4">
+						<h4>Many thanks to:</h4>
+						<ul class="unstyled">
+							<li><a href="http://code.google.com/appengine/">Google App Engine.</a></li>
+							<li><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a></li>
+							<li><a href="http://github.com">Github</a></li>
+							<li><a href="http://www.iconeden.com/">Iconeden</a></li>	
+							<li><a href="http://jquery.com/">jquery</a></li>
+							<li><a href="http://yepnopejs.com/">yepnopejs</a></li>
+							<li><a href="http://coffeescript.org/">Coffeescript</a></li>
+						</ul>
+					</div>
+				</div>
+			</footer>
+		</div><!-- container -->
+	</body>
+</html>

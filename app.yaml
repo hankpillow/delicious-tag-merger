@@ -1,0 +1,45 @@
+application: delicious-tag-merger
+version: 1-0-0
+runtime: python
+api_version: 1
+
+default_expiration: "0"
+
+skip_files:
+- ^(.*/)?\.DS_Store
+- ^(.git)
+- ^(.*/)?coffee
+
+handlers:
+- url: /
+  static_files: index.html
+  upload: index.html
+
+- url: /login
+  script: api/login.py
+
+- url: /merge
+  script: api/merge.py
+
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+  mime_type: image/x-icon
+
+- url: /js
+  static_dir: js
+  
+- url: /img
+  static_dir: img
+  
+- url: /css
+  static_dir: css
+
+- url: /.*
+  static_files: 404.html
+  upload: 404.html
+
+error_handlers:
+- file: errors/error.html
+- error_code: over_quota
+  file: errors/over_quota.html
