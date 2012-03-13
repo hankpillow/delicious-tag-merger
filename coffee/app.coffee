@@ -1,7 +1,5 @@
 # @author igor almeida
 # @version 1.0
-# TO-DO:
-# - github
 class TagMerger
 
 	dom : {}
