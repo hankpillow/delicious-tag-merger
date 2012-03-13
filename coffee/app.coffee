@@ -90,7 +90,8 @@ class TagMerger
 			this.merge_status this.messages.merge_complete, "alert-success"
 			this.btn_status "complete"
 			this.dom.bar.width("100%")
-			$(tag).detach() for tag in this.dom.tags.find("a")
+			this.dom.tag_count.text("").fadeOut()
+			$(tag).detach() for tag in this.dom.tags.find("div")
 			return
 
 		to_merge = this.selection.shift()
@@ -155,7 +156,7 @@ class TagMerger
 				this.dom.btn.text this.messages.label_complete
 	
 	collect_urls : () ->
-		this.selection  = ($(tag).text() for tag in this.dom.tags.find("a"))
+		this.selection  = ($(tag).text() for tag in this.dom.tags.find("a[id='tag']"))
 		tag_count = []
 		tag_count.push node for node in this.posts when tag in $(node).attr("tag").split(" ") for tag in this.selection
 		if tag_count.length isnt 0 and this.selection.length isnt 0
@@ -203,7 +204,7 @@ class TagList
 	init:( list ) ->
 		this.dom.div.fadeIn "slow"
 		list.sort()
-		this.add_tag $("<a data-index='#{index}' class='btn btn-mini btn-info tag'>#{tag}</a>"),false for tag,index in list when tag.length>0
+		this.add_tag $("<a id=\"tag\" data-index='#{index}' class='btn btn-mini btn-info tag'>#{tag}</a>"),false for tag,index in list when tag.length>0
 
 	freeze : ( )->
 		this.dom.tags.find( "a" ).each (value) ->

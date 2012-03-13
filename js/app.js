@@ -107,7 +107,8 @@
         this.merge_status(this.messages.merge_complete, "alert-success");
         this.btn_status("complete");
         this.dom.bar.width("100%");
-        _ref = this.dom.tags.find("a");
+        this.dom.tag_count.text("").fadeOut();
+        _ref = this.dom.tags.find("div");
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           tag = _ref[_i];
           $(tag).detach();
@@ -192,7 +193,7 @@
       var node, tag, tag_count, _i, _j, _len, _len2, _ref, _ref2;
       this.selection = (function() {
         var _i, _len, _ref, _results;
-        _ref = this.dom.tags.find("a");
+        _ref = this.dom.tags.find("a[id='tag']");
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           tag = _ref[_i];
@@ -280,7 +281,7 @@
       for (index = 0, _len = list.length; index < _len; index++) {
         tag = list[index];
         if (tag.length > 0) {
-          _results.push(this.add_tag($("<a data-index='" + index + "' class='btn btn-mini btn-info tag'>" + tag + "</a>"), false));
+          _results.push(this.add_tag($("<a id=\"tag\" data-index='" + index + "' class='btn btn-mini btn-info tag'>" + tag + "</a>"), false));
         }
       }
       return _results;
