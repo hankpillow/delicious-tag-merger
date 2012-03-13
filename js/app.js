@@ -220,22 +220,23 @@
     };
 
     TagMerger.prototype.add_tag = function(tag) {
-      var _this = this;
+      var container,
+        _this = this;
       if (tag == null) tag = void 0;
-      if (this.is_deleting === true) return;
-      if (tag != null) {
-        tag.unbind("click").removeClass("btn-info").addClass("btn-danger");
-      }
-      if (tag != null) {
-        tag.click(function() {
-          var _ref;
-          if (_this.is_deleting === true) return;
-          if ((_ref = window.tag_list) != null) _ref.add_tag(tag);
-          return _this.collect_urls();
-        });
-      }
-      if (tag !== void 0) this.dom.tags.append(tag);
-      if (tag !== void 0) return this.collect_urls();
+      if (this.is_deleting === true || tag === void 0) return;
+      tag.unbind("click").removeClass("btn-info").addClass("btn-danger");
+      tag.click(function() {
+        var _ref;
+        if (_this.is_deleting === true) return;
+        tag.parent().detach();
+        if ((_ref = window.tag_list) != null) _ref.add_tag(tag);
+        return _this.collect_urls();
+      });
+      container = $("<div class=\"well well-super-compat\"></div>");
+      container.append(tag);
+      container.append($("<a target=\"_blank\" href=\"http://www.delicious.com/" + window.login.username + "/" + (tag.text()) + "\"><img src=\"img/tags-page.png\" alt=\"tags\" title=\"see the urls using this tag\"></a>"));
+      this.dom.tags.append(container);
+      return this.collect_urls();
     };
 
     TagMerger.prototype.dispose = function() {
@@ -248,7 +249,7 @@
       this.dom.div.hide();
       this.posts = void 0;
       this.selection = void 0;
-      _ref = this.dom.tags.find("a");
+      _ref = this.dom.tags.find("div");
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         tag = _ref[_i];
@@ -357,6 +358,8 @@
 
     Login.prototype.login_url = "/login";
 
+    Login.prototype.username = void 0;
+
     Login.prototype.messages = {
       invalid: "Check the username and password.",
       system_error: "Error connecting to server. Try again later.",
@@ -380,6 +383,7 @@
       this.dom.user_name = $("#delicious_name");
       this.dom.form = $("#frm_login");
       this.dom.fields = $("#frm_login fieldset");
+      this.username = void 0;
       this.dom.user.parent().removeClass("error");
       this.dom.pass.parent().removeClass("error");
       this.dom.form.unbind("submit");
@@ -496,7 +500,8 @@
       this.btn_status("logout");
       this.form_status(void 0);
       this.dom.fields.fadeOut();
-      this.dom.user_name.text(this.messages.hello + $(posts).attr("user"));
+      this.username = $(posts).attr("user");
+      this.dom.user_name.text(this.messages.hello + this.username);
       this.dom.user_name.fadeIn();
       posts_list = $(posts).find("post");
       tags = [];

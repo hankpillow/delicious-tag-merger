@@ -164,16 +164,21 @@ class TagMerger
 			this.dom.tag_count.text("").fadeOut "slow"
 
 	add_tag: (tag = undefined)->
-		return if this.is_deleting is true
+		return if this.is_deleting is true or tag is undefined
 
-		tag?.unbind("click").removeClass("btn-info").addClass("btn-danger")
-		tag?.click () => 
+		tag.unbind("click").removeClass("btn-info").addClass("btn-danger")
+		tag.click () => 
 			return if this.is_deleting is true
+			tag.parent().detach()
 			window.tag_list?.add_tag tag
 			this.collect_urls()
-			
-		this.dom.tags.append tag if tag isnt undefined
-		this.collect_urls() if tag isnt undefined
+
+		container = $("<div class=\"well well-super-compat\"></div>")
+		container.append tag
+		container.append $("<a target=\"_blank\" href=\"http://www.delicious.com/#{window.login.username}/#{tag.text()}\"><img src=\"img/tags-page.png\" alt=\"tags\" title=\"see the urls using this tag\"></a>")
+
+		this.dom.tags.append container
+		this.collect_urls()
 
 	dispose : () ->
 		this.stop_merging()
@@ -184,7 +189,7 @@ class TagMerger
 		this.dom.div.hide()
 		this.posts = undefined
 		this.selection  = undefined
-		$(tag).detach() for tag in this.dom.tags.find("a")
+		$(tag).detach() for tag in this.dom.tags.find("div")
 
 class TagList
 
@@ -238,6 +243,7 @@ class Login
 
 	dom : {}
 	login_url : "/login"
+	username : undefined
 
 	messages : 
 		invalid: "Check the username and password."
@@ -260,6 +266,7 @@ class Login
 		this.dom.user_name = $("#delicious_name")
 		this.dom.form = $("#frm_login")
 		this.dom.fields = $("#frm_login fieldset")
+		this.username = undefined
 
 		this.dom.user.parent().removeClass("error") 
 		this.dom.pass.parent().removeClass("error")
@@ -364,7 +371,8 @@ class Login
 		this.form_status undefined
 
 		this.dom.fields.fadeOut();
-		this.dom.user_name.text ( this.messages.hello + $(posts).attr "user" )
+		this.username = $(posts).attr "user"
+		this.dom.user_name.text ( this.messages.hello + this.username )
 		this.dom.user_name.fadeIn()
 		
 		posts_list = $(posts).find("post")
