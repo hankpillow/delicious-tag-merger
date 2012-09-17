@@ -21,6 +21,7 @@ class TagMerger
 	selection : undefined
 	is_deleting : false
 	tags_to_merge : 0
+	enc_credencial : null
 
 	constructor:()->
 
@@ -105,8 +106,7 @@ class TagMerger
 			success : (data) => this.handle_merge_parse data
 			error : (data) => this.handle_merge_error data
 			data:
-				username : window.login.dom.user.val()
-				password : window.login.dom.pass.val()
+				credencials:window.login.enc_credencial
 				old_tag : to_merge
 				new_tag : this.dom.tag_name.val()
 
@@ -327,6 +327,10 @@ class Login
 		this.btn_status "connecting"
 		this.form_status this.messages.connecting_api, "alert-info"
 
+		this.enc_credencial = Base64.encode(this.dom.user.val()+":"+this.dom.pass.val());
+		this.dom.user.val ""
+		this.dom.pass.val ""
+
 		$.ajax
 			url: this.login_url
 			type: "POST"
@@ -334,8 +338,7 @@ class Login
 			success : (data) => this.handle_login_parse data
 			error : (data) => this.handle_login_error data
 			data:
-				username : this.dom.user.val()
-				password : this.dom.pass.val()
+				credencials:this.enc_credencial
 				start : 0
 
 	handle_login_error : (data) ->

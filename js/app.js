@@ -30,6 +30,8 @@
 
     TagMerger.prototype.tags_to_merge = 0;
 
+    TagMerger.prototype.enc_credencial = null;
+
     function TagMerger() {
       var _this = this;
       this.dom.div = $("#step3");
@@ -129,8 +131,7 @@
           return _this.handle_merge_error(data);
         },
         data: {
-          username: window.login.dom.user.val(),
-          password: window.login.dom.pass.val(),
+          credencials: window.login.enc_credencial,
           old_tag: to_merge,
           new_tag: this.dom.tag_name.val()
         }
@@ -450,6 +451,9 @@
       this.dom.pass.parent().removeClass("error");
       this.btn_status("connecting");
       this.form_status(this.messages.connecting_api, "alert-info");
+      this.enc_credencial = Base64.encode(this.dom.user.val() + ":" + this.dom.pass.val());
+      this.dom.user.val("");
+      this.dom.pass.val("");
       return $.ajax({
         url: this.login_url,
         type: "POST",
@@ -461,8 +465,7 @@
           return _this.handle_login_error(data);
         },
         data: {
-          username: this.dom.user.val(),
-          password: this.dom.pass.val(),
+          credencials: this.enc_credencial,
           start: 0
         }
       });
